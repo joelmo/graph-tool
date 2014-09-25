@@ -1448,7 +1448,17 @@ class Graph(object):
                         self.__graph.ShiftVertexProperty(pmap()._PropertyMap__map.get_map(), index)
 
         libcore.remove_vertex(self.__graph, vertex, fast)
-
+    
+    def remove_vertices(self, vertices, fast=False, srt=True):
+        r"""Remove vertices.
+        ``vertices`` must be an iterator that yields vertices to remove.
+        When ``srt`` is true ``vertices`` will be sorted by vertex_index in reverse order.
+        Deleting a vertex with lower index may invalidate one with higher index.
+        """
+        for v in (sorted(vertices, reversed=True, key=lambda v: v.__hash__()) 
+                            if srt else vertices):
+            self.remove_vertex(v, fast=fast)
+    
     def clear_vertex(self, vertex):
         """Remove all in and out-edges from the given vertex."""
         del_es = set()
